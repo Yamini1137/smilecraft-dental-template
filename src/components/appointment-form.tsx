@@ -1,0 +1,14 @@
+import { useState, type FormEvent } from "react";
+import { CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+export function AppointmentForm() {
+  const [sent, setSent] = useState(false);
+  const submit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); if (event.currentTarget.checkValidity()) setSent(true); };
+  if (sent) return <div className="grid min-h-96 place-items-center rounded-lg bg-secondary p-10 text-center" role="status"><div><CheckCircle2 className="mx-auto size-11 text-primary" /><h3 className="mt-5 font-display text-2xl font-semibold">Request received</h3><p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Thank you. Our care team will call you within one business day to confirm your appointment.</p><Button variant="outline" className="mt-6 rounded-full" onClick={() => setSent(false)}>Send another request</Button></div></div>;
+  return <form onSubmit={submit} className="grid gap-5" noValidate={false}><div className="grid gap-5 sm:grid-cols-2"><Field label="Full name" id="name"><Input id="name" name="name" required placeholder="Your full name" className="h-12 bg-background" /></Field><Field label="Phone number" id="phone"><Input id="phone" name="phone" type="tel" required placeholder="(555) 000-0000" className="h-12 bg-background" /></Field></div><div className="grid gap-5 sm:grid-cols-2"><Field label="Email address" id="email"><Input id="email" name="email" type="email" required placeholder="you@example.com" className="h-12 bg-background" /></Field><Field label="Preferred date" id="date"><Input id="date" name="date" type="date" required className="h-12 bg-background" /></Field></div><Field label="How can we help?" id="message"><Textarea id="message" name="message" required minLength={10} placeholder="Tell us briefly what you’d like to discuss" className="min-h-32 resize-y bg-background" /></Field><label className="flex items-start gap-3 text-xs leading-5 text-muted-foreground"><input type="checkbox" required className="mt-1 accent-primary" />I agree to be contacted about this appointment request. This form is not for urgent medical concerns.</label><Button type="submit" size="lg" className="h-12 w-full rounded-full sm:w-fit">Request Appointment</Button></form>;
+}
+
+function Field({ label, id, children }: { label: string; id: string; children: React.ReactNode }) { return <div className="grid gap-2"><label htmlFor={id} className="text-sm font-semibold">{label}</label>{children}</div>; }
